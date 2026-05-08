@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-
 import axios from "axios";
 
 function App() {
 
   const [todos, setTodos] = useState([]);
-
   const [text, setText] = useState("");
-
   const [filter, setFilter] = useState("all");
 
+  // RENDER BACKEND URL
+  const API_URL = "https://todo-backend-mf76.onrender.com/api/todos";
 
   // FETCH TODOS
   const fetchTodos = async () => {
 
-    const res = await axios.get(
-      "http://localhost:5000/api/todos"
-    );
+    const res = await axios.get(API_URL);
 
     setTodos(res.data);
   };
@@ -27,7 +24,6 @@ function App() {
 
   }, []);
 
-
   // ADD TODO
   const addTodo = async () => {
 
@@ -35,43 +31,32 @@ function App() {
       return alert("Enter task");
     }
 
-    await axios.post(
-      "http://localhost:5000/api/todos",
-      {
-        text,
-      }
-    );
+    await axios.post(API_URL, {
+      text,
+    });
 
     setText("");
 
     fetchTodos();
   };
 
-
   // DELETE TODO
   const deleteTodo = async (id) => {
 
-    await axios.delete(
-      `http://localhost:5000/api/todos/${id}`
-    );
+    await axios.delete(`${API_URL}/${id}`);
 
     fetchTodos();
   };
-
 
   // TOGGLE COMPLETE
   const toggleComplete = async (todo) => {
 
-    await axios.put(
-      `http://localhost:5000/api/todos/${todo._id}`,
-      {
-        completed: !todo.completed,
-      }
-    );
+    await axios.put(`${API_URL}/${todo._id}`, {
+      completed: !todo.completed,
+    });
 
     fetchTodos();
   };
-
 
   // FILTER TODOS
   const filteredTodos = todos.filter((todo) => {
@@ -86,7 +71,6 @@ function App() {
 
     return true;
   });
-
 
   return (
 
@@ -119,7 +103,6 @@ function App() {
         >
           ✅ To-Do App
         </h1>
-
 
         {/* INPUT */}
 
@@ -161,7 +144,6 @@ function App() {
 
         </div>
 
-
         {/* FILTERS */}
 
         <div
@@ -185,7 +167,6 @@ function App() {
           </button>
 
         </div>
-
 
         {/* TODOS */}
 
